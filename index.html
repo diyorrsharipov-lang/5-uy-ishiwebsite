@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Court — Your Food court at home | Fast Food Delivery</title>
+  
+  <!-- Fonts: Plus Jakarta Sans / Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              yellow: '#FFE245',
+              yellowHover: '#F7D625',
+              yellowDark: '#E5BC00',
+              yellowLight: '#FFF8D6',
+              dark: '#1C1C24',
+              darker: '#121217',
+              grayBg: '#F3F4FB',
+              grayCard: '#FFFFFF',
+              grayText: '#7B7B8F',
+              grayBorder: '#E6E8F2',
+              red: '#FF4757',
+              redLight: '#FFEAEB',
+              green: '#2ECC71',
+              greenLight: '#E8F8F0',
+            }
+          },
+          boxShadow: {
+            'card': '0 10px 30px -5px rgba(28, 28, 36, 0.05)',
+            'card-hover': '0 20px 35px -5px rgba(255, 226, 69, 0.25)',
+            'yellow': '0 10px 25px -5px rgba(255, 226, 69, 0.4)',
+            'header': '0 4px 20px rgba(0, 0, 0, 0.03)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #F3F4FB;
+      color: #1C1C24;
+      overflow-x: hidden;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F3F4FB;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #FFE245;
+      border-radius: 9999px;
+    }
+    .transition-smooth {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hero-glow {
+      background: radial-gradient(circle, rgba(255, 226, 69, 0.35) 0%, rgba(255, 226, 69, 0.05) 60%, transparent 80%);
+    }
+  </style>
+</head>
+<body class="bg-brand-grayBg text-brand-dark antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="w-full bg-white/95 backdrop-blur-md sticky top-0 z-40 shadow-header border-b border-brand-grayBorder/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="w-11 h-11 rounded-2xl bg-brand-yellow flex items-center justify-center text-brand-dark shadow-yellow group-hover:scale-105 transition-smooth">
+            <!-- Chef / Delivery Bag Icon -->
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xl font-extrabold tracking-tight text-brand-dark leading-none">
+              Food<span class="text-brand-dark font-black">Court</span>
+            </span>
+            <span class="text-[10px] uppercase font-bold tracking-widest text-brand-grayText mt-0.5">
+              at home
+            </span>
+          </div>
+        </a>
+
+        <!-- Delivery Address Picker -->
+        <div class="hidden md:flex items-center gap-2.5 px-3.5 py-2 bg-brand-grayBg rounded-full border border-brand-grayBorder hover:border-brand-yellow cursor-pointer transition-smooth" onclick="openAddressModal()">
+          <div class="w-7 h-7 rounded-full bg-white flex items-center justify-center text-brand-yellowDark shadow-xs">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+          <div class="flex flex-col text-left">
+            <span class="text-[10px] font-semibold text-brand-grayText leading-none uppercase">Deliver to:</span>
+            <span id="currentAddress" class="text-xs font-bold text-brand-dark flex items-center gap-1">
+              742 Evergreen Terrace
+              <svg class="w-3 h-3 text-brand-grayText" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- Global Search Bar -->
+        <div class="hidden lg:flex flex-1 max-w-sm mx-6">
+          <div class="relative w-full">
+            <input 
+              type="text" 
+              id="headerSearchInput" 
+              oninput="handleSearch(this.value)"
+              placeholder="Search dishes, burgers, sushi..." 
+              class="w-full pl-10 pr-4 py-2.5 bg-brand-grayBg text-xs font-medium border border-transparent rounded-full focus:bg-white focus:outline-none focus:border-brand-yellow focus:ring-4 focus:ring-brand-yellow/20 transition-smooth"
+            >
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-brand-grayText">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Controls: Notifications & Cart -->
+        <div class="flex items-center gap-3">
+          
+          <!-- Notifications -->
+          <button onclick="showToast('No new notifications today')" class="p-2.5 text-brand-dark hover:bg-brand-grayBg rounded-full transition-smooth relative" title="Notifications">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-red rounded-full"></span>
+          </button>
+
+          <!-- Cart Trigger Button with badge -->
+          <button 
+            onclick="toggleCartDrawer()" 
+            class="flex items-center gap-2.5 bg-brand-yellow hover:bg-brand-yellowHover px-4 py-2.5 rounded-full font-bold text-xs text-brand-dark shadow-yellow group transition-smooth"
+          >
+            <div class="relative">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              <span id="cartCountBadge" class="absolute -top-2 -right-2 bg-brand-dark text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-black">
+                2
+              </span>
+            </div>
+            <span class="hidden sm:inline">Cart</span>
+            <span id="cartTotalHeader" class="border-l border-brand-dark/20 pl-2 font-black">$27.40</span>
+          </button>
+
+          <!-- Mobile Menu Trigger -->
+          <button onclick="toggleMobileSearch()" class="lg:hidden p-2 text-brand-dark rounded-xl hover:bg-brand-grayBg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Mobile Search Bar (Collapsible) -->
+      <div id="mobileSearchBar" class="hidden lg:hidden pb-4 pt-1">
+        <input 
+          type="text" 
+          oninput="handleSearch(this.value)"
+          placeholder="Search food, restaurants, dishes..." 
+          class="w-full pl-10 pr-4 py-2.5 bg-brand-grayBg text-xs font-medium border border-gray-200 rounded-full focus:bg-white focus:outline-none focus:border-brand-yellow"
+        >
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="relative pt-8 pb-14 overflow-hidden">
+    <!-- Glow Background Shape -->
+    <div class="hero-glow absolute top-10 right-10 w-[600px] h-[600px] rounded-full pointer-events-none filter blur-3xl opacity-70"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="bg-white rounded-[36px] p-8 sm:p-12 lg:p-16 border border-brand-grayBorder/80 shadow-card relative overflow-hidden">
+        
+        <!-- Background Decorative Pills -->
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-brand-yellowLight rounded-full filter blur-2xl opacity-60"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center relative z-10">
+          
+          <!-- Left Text Content -->
+          <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Live Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-yellowLight border border-brand-yellow text-brand-dark text-xs font-extrabold uppercase tracking-wide shadow-xs">
+              <span class="w-2 h-2 rounded-full bg-brand-yellowDark animate-ping"></span>
+              Fastest Food Court Delivery
+            </div>
+
+            <!-- Main Heading (from Figma Concept) -->
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-brand-dark leading-[1.08] tracking-tight">
+              Your Food court <br class="hidden sm:inline">
+              <span class="relative inline-block text-brand-dark">
+                at home
+                <svg class="absolute -bottom-2 left-0 w-full text-brand-yellow h-3 -z-10" viewBox="0 0 100 20" preserveAspectRatio="none">
+                  <path d="M0 10 Q 50 20 100 10" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="transparent"/>
+                </svg>
+              </span>
+            </h1>
+
+            <p class="text-sm sm:text-base text-brand-grayText max-w-lg leading-relaxed font-normal">
+              Order fresh signature dishes, gourmet burgers, artisan pizza, poke bowls, and artisan desserts from local food courts, delivered piping hot in under 25 minutes.
+            </p>
+
+            <!-- Search or Quick Action Box -->
+            <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-lg">
+              <div class="relative flex-1">
+                <input 
+                  type="text" 
+                  id="heroSearchInput" 
+                  oninput="handleSearch(this.value)"
+                  placeholder="What are you craving today?" 
+                  class="w-full pl-11 pr-4 py-3.5 bg-brand-grayBg text-xs sm:text-sm font-medium rounded-2xl border border-transparent focus:border-brand-yellow focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-yellow/20 transition-smooth"
+                >
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-brand-grayText">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <button onclick="scrollToMenu()" class="px-7 py-3.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark text-xs sm:text-sm font-black rounded-2xl shadow-yellow transform hover:-translate-y-0.5 transition-smooth whitespace-nowrap flex items-center justify-center gap-2">
+                <span>Explore Menu</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Metric stats -->
+            <div class="pt-4 flex items-center gap-8 text-left border-t border-brand-grayBorder/60">
+              <div>
+                <p class="text-2xl font-black text-brand-dark">20<span class="text-brand-yellowDark">m</span></p>
+                <p class="text-[11px] font-medium text-brand-grayText">Avg. Delivery</p>
+              </div>
+              <div class="w-px h-8 bg-brand-grayBorder"></div>
+              <div>
+                <p class="text-2xl font-black text-brand-dark">4.9<span class="text-brand-yellowDark">★</span></p>
+                <p class="text-[11px] font-medium text-brand-grayText">Foodie Rating</p>
+              </div>
+              <div class="w-px h-8 bg-brand-grayBorder"></div>
+              <div>
+                <p class="text-2xl font-black text-brand-dark">45<span class="text-brand-yellowDark">+</span></p>
+                <p class="text-[11px] font-medium text-brand-grayText">Local Kitchens</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Showcase Image with Badges -->
+          <div class="lg:col-span-5 relative flex justify-center">
+            <div class="relative w-full max-w-sm sm:max-w-md">
+              
+              <!-- Yellow Ring Background -->
+              <div class="absolute inset-0 bg-brand-yellow rounded-full filter blur-xl opacity-40 scale-95 transform -rotate-6"></div>
+
+              <!-- Main Hero Dish Image -->
+              <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform hover:rotate-1 transition-smooth">
+                <img 
+                  src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1000&q=80" 
+                  alt="Deluxe Food Court Burger" 
+                  class="w-full h-80 sm:h-96 object-cover transform hover:scale-105 transition-smooth duration-700"
+                >
+              </div>
+
+              <!-- Floating Card 1: Delivery Driver status -->
+              <div class="absolute -top-5 -left-5 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-brand-grayBorder/80 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-greenLight text-brand-green flex items-center justify-center font-bold">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-brand-dark">Express Courier</p>
+                  <p class="text-[10px] text-brand-green font-semibold">14 mins away</p>
+                </div>
+              </div>
+
+              <!-- Floating Card 2: Promo Discount -->
+              <div class="absolute -bottom-5 -right-5 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-brand-grayBorder/80 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-redLight text-brand-red flex items-center justify-center font-black text-sm">
+                  30%
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-brand-dark">Special Promo</p>
+                  <p class="text-[10px] text-brand-grayText">Code: <span class="font-bold text-brand-dark">FOODCOURT</span></p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== CATEGORIES SELECTOR ==================== -->
+  <section class="py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-2xl font-black text-brand-dark tracking-tight">Popular Cuisines</h2>
+          <p class="text-xs text-brand-grayText mt-0.5">Explore by category or food court kitchen</p>
+        </div>
+        <span class="text-xs font-bold text-brand-yellowDark hover:underline cursor-pointer" onclick="filterCategory('All')">
+          View All
+        </span>
+      </div>
+
+      <!-- Categories Pills (Horizontally Scrollable) -->
+      <div class="flex items-center gap-3 overflow-x-auto pb-4 custom-scrollbar" id="categoriesContainer">
+        <!-- Rendered dynamically via JS for active states -->
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==================== MENU / DISHES SECTION ==================== -->
+  <section id="menuSection" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 id="sectionCategoryTitle" class="text-2xl sm:text-3xl font-black text-brand-dark tracking-tight">
+            Trending at Food Court
+          </h2>
+          <p class="text-xs text-brand-grayText mt-1">Hand-picked dishes freshly prepared upon order</p>
+        </div>
+        
+        <!-- Filter dropdown / sort -->
+        <div class="flex items-center gap-2">
+          <select id="sortSelect" onchange="handleSort(this.value)" class="bg-white border border-brand-grayBorder text-brand-dark text-xs font-bold px-3 py-2 rounded-xl focus:outline-none focus:border-brand-yellow cursor-pointer shadow-xs">
+            <option value="popular">Popular First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Food Items Grid -->
+      <div id="dishesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Dish Cards rendered dynamically by JS -->
+      </div>
+
+      <!-- Empty State (when search has no results) -->
+      <div id="emptyState" class="hidden text-center py-16 bg-white rounded-3xl border border-brand-grayBorder/80">
+        <div class="w-16 h-16 bg-brand-yellowLight text-brand-yellowDark rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-black">
+          🍜
+        </div>
+        <h3 class="text-lg font-bold text-brand-dark mb-1">No dishes found</h3>
+        <p class="text-xs text-brand-grayText mb-4">Try searching for another dish or reset categories.</p>
+        <button onclick="resetFilters()" class="px-5 py-2.5 bg-brand-yellow text-brand-dark text-xs font-bold rounded-xl shadow-xs">
+          Reset Filters
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==================== SPECIAL PROMO BANNER ==================== -->
+  <section class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-r from-brand-dark to-brand-darker text-white rounded-[32px] p-8 sm:p-12 relative overflow-hidden shadow-2xl">
+        
+        <!-- Pattern background -->
+        <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-brand-yellow/20 filter blur-3xl"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
+          
+          <div class="md:col-span-8 space-y-4">
+            <span class="inline-block px-3 py-1 bg-brand-red text-white text-xs font-black rounded-lg uppercase tracking-wider">
+              Limited Time Offer
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-black leading-tight">
+              Get <span class="text-brand-yellow">30% OFF</span> on your first order
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-300 font-light max-w-xl">
+              Use promo code at checkout. Valid on all participating food court restaurants for orders over $25.
+            </p>
+            
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <div class="bg-white/10 border border-white/20 backdrop-blur-md px-4 py-2.5 rounded-xl font-mono text-sm font-bold tracking-widest text-brand-yellow flex items-center gap-3">
+                <span>FOODCOURT30</span>
+                <button onclick="copyPromoCode()" class="text-xs bg-brand-yellow text-brand-dark px-2.5 py-1 rounded-md font-bold uppercase hover:bg-white transition-smooth">
+                  Copy
+                </button>
+              </div>
+              <span class="text-xs text-gray-400">Expires in 48 hours</span>
+            </div>
+          </div>
+
+          <div class="md:col-span-4 flex justify-center">
+            <div class="relative w-48 h-48 rounded-full bg-white/5 border border-white/10 p-3 flex items-center justify-center">
+              <img 
+                src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80" 
+                alt="Pizza Promo" 
+                class="w-full h-full object-cover rounded-full shadow-2xl transform hover:rotate-12 transition-smooth"
+              >
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== HOW IT WORKS / 3 STEPS ==================== -->
+  <section class="py-14 bg-white border-y border-brand-grayBorder/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-yellowDark">Seamless Experience</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-brand-dark tracking-tight mt-1">
+          How Food Court Works
+        </h2>
+        <p class="text-xs sm:text-sm text-brand-grayText mt-2">
+          From your mobile or desktop straight to your dining table in 3 simple steps
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Step 1 -->
+        <div class="bg-brand-grayBg rounded-3xl p-8 border border-brand-grayBorder/60 hover:border-brand-yellow transition-smooth group text-center flex flex-col items-center">
+          <div class="w-16 h-16 rounded-2xl bg-white shadow-xs text-brand-dark flex items-center justify-center font-black text-2xl mb-6 group-hover:scale-110 group-hover:bg-brand-yellow transition-smooth">
+            🍕
+          </div>
+          <span class="text-xs font-extrabold text-brand-yellowDark uppercase mb-1">Step 1</span>
+          <h3 class="text-base font-bold text-brand-dark mb-2">Choose Your Craving</h3>
+          <p class="text-xs text-brand-grayText leading-relaxed">
+            Browse through menus of top-tier kitchens, customize ingredients, and add to basket.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-brand-grayBg rounded-3xl p-8 border border-brand-grayBorder/60 hover:border-brand-yellow transition-smooth group text-center flex flex-col items-center">
+          <div class="w-16 h-16 rounded-2xl bg-white shadow-xs text-brand-dark flex items-center justify-center font-black text-2xl mb-6 group-hover:scale-110 group-hover:bg-brand-yellow transition-smooth">
+            💳
+          </div>
+          <span class="text-xs font-extrabold text-brand-yellowDark uppercase mb-1">Step 2</span>
+          <h3 class="text-base font-bold text-brand-dark mb-2">Easy 1-Click Payment</h3>
+          <p class="text-xs text-brand-grayText leading-relaxed">
+            Secure checkout via Apple Pay, credit card, or cash on delivery with real-time receipt.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-brand-grayBg rounded-3xl p-8 border border-brand-grayBorder/60 hover:border-brand-yellow transition-smooth group text-center flex flex-col items-center">
+          <div class="w-16 h-16 rounded-2xl bg-white shadow-xs text-brand-dark flex items-center justify-center font-black text-2xl mb-6 group-hover:scale-110 group-hover:bg-brand-yellow transition-smooth">
+            🚀
+          </div>
+          <span class="text-xs font-extrabold text-brand-yellowDark uppercase mb-1">Step 3</span>
+          <h3 class="text-base font-bold text-brand-dark mb-2">Fast Hot Delivery</h3>
+          <p class="text-xs text-brand-grayText leading-relaxed">
+            Track your dedicated courier live on the map. Enjoy steaming meals at your doorstep.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==================== APP DOWNLOAD BANNER ==================== -->
+  <section class="py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-brand-yellow rounded-[36px] p-8 sm:p-12 lg:p-14 relative overflow-hidden shadow-card">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <div class="lg:col-span-8 space-y-4">
+            <span class="text-xs font-extrabold uppercase tracking-widest text-brand-dark/70">Mobile Experience</span>
+            <h2 class="text-3xl sm:text-4xl font-black text-brand-dark leading-tight">
+              Get the Food Court App <br class="hidden sm:inline">for exclusive daily discounts
+            </h2>
+            <p class="text-xs sm:text-sm text-brand-dark/80 max-w-lg leading-relaxed font-medium">
+              Real-time live map tracking, order scheduling, personalized dish recommendations, and member loyalty points with every meal.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <button onclick="showToast('Redirecting to Apple App Store...')" class="flex items-center gap-3 px-5 py-3 bg-brand-dark text-white rounded-2xl hover:bg-black transition-smooth shadow-lg">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.63 1.34-.56.64-1.04 1.71-.92 2.74.99.08 2.01-.48 2.63-1.23z"/>
+                </svg>
+                <div class="text-left">
+                  <p class="text-[9px] uppercase font-bold text-gray-400 leading-none">Download on the</p>
+                  <p class="text-xs font-bold leading-none mt-1">App Store</p>
+                </div>
+              </button>
+
+              <button onclick="showToast('Redirecting to Google Play...')" class="flex items-center gap-3 px-5 py-3 bg-brand-dark text-white rounded-2xl hover:bg-black transition-smooth shadow-lg">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                  <path d="M3.609 1.814L13.793 12 3.61 22.186c-.368-.357-.61-.871-.61-1.464V3.278c0-.593.242-1.107.61-1.464zm11.603 11.603l2.257 2.257-11.83 6.786 9.573-9.043zm2.973-1.704l2.678 1.536c.804.461.804 1.214 0 1.675l-2.678 1.536-2.439-2.439 2.439-2.308zm-2.973-1.704L5.639 2.966l11.83 6.786-2.257 2.257z"/>
+                </svg>
+                <div class="text-left">
+                  <p class="text-[9px] uppercase font-bold text-gray-400 leading-none">Get it on</p>
+                  <p class="text-xs font-bold leading-none mt-1">Google Play</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 flex justify-center">
+            <div class="w-56 h-56 bg-white/40 rounded-3xl p-6 backdrop-blur-md flex flex-col items-center justify-center text-center shadow-inner border border-white/50">
+              <span class="text-4xl mb-2">📱</span>
+              <p class="text-xs font-extrabold text-brand-dark">Scan QR to Install</p>
+              <p class="text-[10px] text-brand-dark/70 mt-1">Available for iOS & Android</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-brand-dark text-gray-400 pt-16 pb-12 border-t border-brand-darker">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-gray-800">
+        
+        <!-- Brand Info -->
+        <div class="lg:col-span-4 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-brand-yellow flex items-center justify-center text-brand-dark font-black">
+              FC
+            </div>
+            <span class="text-xl font-black text-white tracking-tight">FoodCourt</span>
+          </div>
+          <p class="text-xs text-gray-400 font-light leading-relaxed max-w-sm">
+            Concept design for modern multi-kitchen food court delivery. Premium taste, verified chef partners, and rapid delivery under 25 minutes.
+          </p>
+          <div class="flex items-center gap-3 pt-2">
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-brand-yellow hover:text-brand-dark transition-smooth">
+              f
+            </a>
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-brand-yellow hover:text-brand-dark transition-smooth">
+              t
+            </a>
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-brand-yellow hover:text-brand-dark transition-smooth">
+              in
+            </a>
+            <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-brand-yellow hover:text-brand-dark transition-smooth">
+              ig
+            </a>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="lg:col-span-2 space-y-3">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Cuisines</h4>
+          <ul class="space-y-2 text-xs font-light">
+            <li><a href="#menuSection" onclick="filterCategory('Burgers')" class="hover:text-brand-yellow transition-smooth">Burgers</a></li>
+            <li><a href="#menuSection" onclick="filterCategory('Pizza')" class="hover:text-brand-yellow transition-smooth">Artisan Pizza</a></li>
+            <li><a href="#menuSection" onclick="filterCategory('Asian')" class="hover:text-brand-yellow transition-smooth">Asian & Bowls</a></li>
+            <li><a href="#menuSection" onclick="filterCategory('Salads')" class="hover:text-brand-yellow transition-smooth">Healthy Salads</a></li>
+            <li><a href="#menuSection" onclick="filterCategory('Desserts')" class="hover:text-brand-yellow transition-smooth">Desserts & Bakery</a></li>
+          </ul>
+        </div>
+
+        <!-- Company Links -->
+        <div class="lg:col-span-2 space-y-3">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Company</h4>
+          <ul class="space-y-2 text-xs font-light">
+            <li><a href="#" class="hover:text-brand-yellow transition-smooth">About Us</a></li>
+            <li><a href="#" class="hover:text-brand-yellow transition-smooth">Food Court Partners</a></li>
+            <li><a href="#" class="hover:text-brand-yellow transition-smooth">Become a Courier</a></li>
+            <li><a href="#" class="hover:text-brand-yellow transition-smooth">Press & Media</a></li>
+            <li><a href="#" class="hover:text-brand-yellow transition-smooth">Careers</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter & Contact -->
+        <div class="lg:col-span-4 space-y-4">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Stay Hungry for Deals</h4>
+          <p class="text-xs text-gray-400 font-light leading-relaxed">
+            Subscribe to our weekly food digest and receive special VIP promo codes.
+          </p>
+
+          <form onsubmit="handleNewsletter(event)" class="space-y-2">
+            <div class="relative">
+              <input 
+                type="email" 
+                id="newsletterInput" 
+                required 
+                placeholder="Enter your email" 
+                class="w-full px-4 py-2.5 bg-gray-900 border border-gray-700 text-xs text-white rounded-xl focus:outline-none focus:border-brand-yellow"
+              >
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-brand-yellow text-brand-dark font-extrabold text-xs rounded-xl hover:bg-brand-yellowHover transition-smooth shadow-xs uppercase tracking-wider">
+              Subscribe Now
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+        <div>
+          © 2026 Food Court Delivery Concept. Inspired by Figma Community.
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-white transition-smooth">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition-smooth">Terms of Service</a>
+          <a href="#" class="hover:text-white transition-smooth">Cookie Settings</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ==================== CART DRAWER ==================== -->
+  <div id="cartDrawerBackdrop" onclick="toggleCartDrawer()" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300"></div>
+
+  <div id="cartDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+    
+    <!-- Cart Header -->
+    <div class="p-6 border-b border-brand-grayBorder flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-yellow flex items-center justify-center text-brand-dark font-bold shadow-xs">
+          🛍️
+        </div>
+        <div>
+          <h3 class="text-base font-extrabold text-brand-dark">Your Order Basket</h3>
+          <p id="cartItemsSubtitle" class="text-xs text-brand-grayText">2 items from Food Court</p>
+        </div>
+      </div>
+
+      <button onclick="toggleCartDrawer()" class="p-2 text-brand-grayText hover:text-brand-dark rounded-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Cart Items Scrollable List -->
+    <div id="cartItemsList" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+      <!-- Items dynamically populated -->
+    </div>
+
+    <!-- Cart Footer & Checkout -->
+    <div class="p-6 bg-brand-grayBg/60 border-t border-brand-grayBorder space-y-4">
+      
+      <!-- Promo code input -->
+      <div class="flex items-center gap-2">
+        <input 
+          type="text" 
+          id="cartPromoInput" 
+          placeholder="Promo code (try FOODCOURT30)" 
+          class="flex-1 px-3.5 py-2 bg-white border border-brand-grayBorder rounded-xl text-xs font-medium focus:outline-none focus:border-brand-yellow uppercase"
+        >
+        <button onclick="applyPromoCode()" class="px-4 py-2 bg-brand-dark text-white rounded-xl text-xs font-bold hover:bg-black transition-smooth">
+          Apply
+        </button>
+      </div>
+
+      <!-- Price Breakdown -->
+      <div class="space-y-1.5 text-xs text-brand-grayText">
+        <div class="flex justify-between">
+          <span>Subtotal</span>
+          <span id="cartSubtotal" class="font-bold text-brand-dark">$23.50</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Estimated Delivery (20 min)</span>
+          <span id="cartDeliveryFee" class="font-bold text-brand-green">FREE</span>
+        </div>
+        <div id="cartDiscountRow" class="flex justify-between hidden text-brand-red font-semibold">
+          <span>Discount (30%)</span>
+          <span id="cartDiscountAmount">-$7.05</span>
+        </div>
+        <div class="flex justify-between pt-2 border-t border-brand-grayBorder text-sm font-black text-brand-dark">
+          <span>Total Amount</span>
+          <span id="cartFinalTotal" class="text-base text-brand-dark">$23.50</span>
+        </div>
+      </div>
+
+      <!-- Checkout Button -->
+      <button onclick="handleCheckout()" class="w-full py-3.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark text-xs sm:text-sm font-black rounded-2xl shadow-yellow transition-smooth flex items-center justify-center gap-2">
+        <span>Proceed to Checkout</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+        </svg>
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==================== ADDRESS PICKER MODAL ==================== -->
+  <div id="addressModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeAddressModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-700">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <div class="text-center mb-5">
+        <div class="w-12 h-12 bg-brand-yellowLight text-brand-yellowDark rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl">
+          📍
+        </div>
+        <h3 class="text-lg font-bold text-brand-dark">Delivery Address</h3>
+        <p class="text-xs text-brand-grayText">Select your current location to view nearby food courts</p>
+      </div>
+
+      <div class="space-y-2.5 mb-5">
+        <button onclick="selectAddress('742 Evergreen Terrace')" class="w-full text-left p-3.5 rounded-2xl border border-brand-yellow bg-brand-yellowLight/40 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-brand-dark">Home (Default)</p>
+            <p class="text-[11px] text-brand-grayText">742 Evergreen Terrace, Springfield</p>
+          </div>
+          <span class="text-brand-yellowDark font-black">✓</span>
+        </button>
+
+        <button onclick="selectAddress('452 Grand Avenue, Suite 4B')" class="w-full text-left p-3.5 rounded-2xl border border-brand-grayBorder hover:border-brand-yellow bg-white transition-smooth flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-brand-dark">Office / Work</p>
+            <p class="text-[11px] text-brand-grayText">452 Grand Avenue, Suite 4B</p>
+          </div>
+        </button>
+
+        <button onclick="selectAddress('Central Park North, Gate 2')" class="w-full text-left p-3.5 rounded-2xl border border-brand-grayBorder hover:border-brand-yellow bg-white transition-smooth flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-brand-dark">Park / Outdoor</p>
+            <p class="text-[11px] text-brand-grayText">Central Park North, Gate 2</p>
+          </div>
+        </button>
+      </div>
+
+      <div class="pt-3 border-t border-brand-grayBorder flex gap-2">
+        <input type="text" id="customAddressInput" placeholder="Enter new address..." class="flex-1 px-3.5 py-2.5 text-xs bg-brand-grayBg rounded-xl border border-transparent focus:bg-white focus:border-brand-yellow focus:outline-none">
+        <button onclick="saveCustomAddress()" class="px-4 py-2.5 bg-brand-yellow font-bold text-xs rounded-xl hover:bg-brand-yellowHover">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 bg-brand-dark text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 z-50 transform translate-y-24 opacity-0 transition-all duration-300">
+    <div class="w-2.5 h-2.5 rounded-full bg-brand-yellow"></div>
+    <span id="toastMessage" class="text-xs font-bold"></span>
+  </div>
+
+
+  <!-- ==================== SCRIPT (DATA & INTERACTION) ==================== -->
+  <script>
+    // Categories List
+    const CATEGORIES = [
+      { id: 'All', name: 'All Cuisines', icon: '🍽️' },
+      { id: 'Burgers', name: 'Burgers', icon: '🍔' },
+      { id: 'Pizza', name: 'Artisan Pizza', icon: '🍕' },
+      { id: 'Asian', name: 'Asian & Bowls', icon: '🍜' },
+      { id: 'Sushi', name: 'Sushi Rolls', icon: '🍣' },
+      { id: 'Salads', name: 'Healthy Greens', icon: '🥗' },
+      { id: 'Desserts', name: 'Desserts & Sweets', icon: '🍩' },
+      { id: 'Drinks', name: 'Smoothies & Drinks', icon: '🥤' }
+    ];
+
+    // Food Items Menu Dataset (high resolution curated appetizing imagery)
+    const DISHES = [
+      {
+        id: 1,
+        title: "Smash Double Cheeseburger",
+        category: "Burgers",
+        price: 11.50,
+        rating: 4.9,
+        time: "15-20 min",
+        tag: "Bestseller",
+        tagColor: "bg-brand-yellow text-brand-dark",
+        desc: "Two dry-aged beef patties, sharp cheddar, caramelized onions & secret smash sauce.",
+        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 2,
+        title: "Artisan Pepperoni Rustica",
+        category: "Pizza",
+        price: 14.99,
+        rating: 4.8,
+        time: "20-25 min",
+        tag: "Chef Choice",
+        tagColor: "bg-brand-red text-white",
+        desc: "San Marzano tomato base, fresh buffalo mozzarella, spicy pepperoni & hot honey drizzle.",
+        image: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 3,
+        title: "Hawaiian Fresh Salmon Poke",
+        category: "Asian",
+        price: 16.20,
+        rating: 4.9,
+        time: "15-20 min",
+        tag: "Healthy",
+        tagColor: "bg-brand-green text-white",
+        desc: "Sashimi-grade salmon, edamame, avocado, spicy mayo, mango cubes & warm sushi rice.",
+        image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 4,
+        title: "Spicy Miso Tonkotsu Ramen",
+        category: "Asian",
+        price: 13.80,
+        rating: 4.7,
+        time: "20-25 min",
+        tag: "Hot & Spicy",
+        tagColor: "bg-brand-red text-white",
+        desc: "Rich 12-hour pork broth, chashu pork belly, marinated ajitsuke egg & spring bamboo.",
+        image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 5,
+        title: "Dragon Flame Sushi Roll",
+        category: "Sushi",
+        price: 15.40,
+        rating: 4.9,
+        time: "15-20 min",
+        tag: "Popular",
+        tagColor: "bg-brand-yellow text-brand-dark",
+        desc: "Crispy tempura prawn inside, topped with torched unagi eel, tobiko & unagi glaze.",
+        image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 6,
+        title: "Grilled Chicken Avocado Caesar",
+        category: "Salads",
+        price: 10.50,
+        rating: 4.6,
+        time: "10-15 min",
+        tag: "Low Carb",
+        tagColor: "bg-brand-green text-white",
+        desc: "Crisp romaine, herb-marinated chicken breast, shaved parmesan, garlic croutons.",
+        image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 7,
+        title: "Belgian Berry Glazed Waffles",
+        category: "Desserts",
+        price: 8.50,
+        rating: 4.9,
+        time: "10-15 min",
+        tag: "Sweet Treat",
+        tagColor: "bg-pink-500 text-white",
+        desc: "Fluffy golden waffles topped with seasonal wild berries, maple syrup & whipped cream.",
+        image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 8,
+        title: "Mango Passion Sunrise Smoothie",
+        category: "Drinks",
+        price: 5.50,
+        rating: 4.8,
+        time: "5-10 min",
+        tag: "Organic",
+        tagColor: "bg-brand-green text-white",
+        desc: "100% natural mango puree, passionfruit nectar, chia seeds & Greek coconut yogurt.",
+        image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80"
+      }
+    ];
+
+    // App State
+    let currentCategory = 'All';
+    let searchQuery = '';
+    let currentSort = 'popular';
+    let cart = [
+      { id: 1, dish: DISHES[0], quantity: 1 },
+      { id: 3, dish: DISHES[2], quantity: 1 }
+    ];
+    let discountApplied = false;
+
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCategories();
+      renderDishes();
+      updateCartUI();
+    });
+
+    // Render Category Pills
+    function renderCategories() {
+      const container = document.getElementById('categoriesContainer');
+      container.innerHTML = CATEGORIES.map(cat => {
+        const isActive = cat.id === currentCategory;
+        const activeClasses = isActive 
+          ? 'bg-brand-yellow text-brand-dark shadow-yellow border-brand-yellow scale-105' 
+          : 'bg-white text-brand-grayText border-brand-grayBorder hover:border-brand-yellow hover:text-brand-dark';
+        
+        return `
+          <button 
+            onclick="filterCategory('${cat.id}')" 
+            class="flex items-center gap-2 px-5 py-3 rounded-2xl border text-xs font-extrabold whitespace-nowrap transition-smooth shadow-xs ${activeClasses}"
+          >
+            <span class="text-base">${cat.icon}</span>
+            <span>${cat.name}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    // Filter by Category
+    function filterCategory(catId) {
+      currentCategory = catId;
+      document.getElementById('sectionCategoryTitle').innerText = catId === 'All' ? 'Trending at Food Court' : `${catId} Specials`;
+      renderCategories();
+      renderDishes();
+    }
+
+    // Filter by Search Query
+    function handleSearch(query) {
+      searchQuery = query.toLowerCase().trim();
+      renderDishes();
+    }
+
+    function toggleMobileSearch() {
+      const s = document.getElementById('mobileSearchBar');
+      s.classList.toggle('hidden');
+    }
+
+    // Sort dishes
+    function handleSort(sortType) {
+      currentSort = sortType;
+      renderDishes();
+    }
+
+    // Render Dishes
+    function renderDishes() {
+      const grid = document.getElementById('dishesGrid');
+      const empty = document.getElementById('emptyState');
+
+      let filtered = DISHES.filter(d => {
+        const matchCat = (currentCategory === 'All') || (d.category === currentCategory);
+        const matchSearch = (!searchQuery) || (d.title.toLowerCase().includes(searchQuery) || d.desc.toLowerCase().includes(searchQuery) || d.category.toLowerCase().includes(searchQuery));
+        return matchCat && matchSearch;
+      });
+
+      // Sorting
+      if (currentSort === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (currentSort === 'price-high') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (currentSort === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      grid.innerHTML = filtered.map(dish => {
+        const cartItem = cart.find(item => item.dish.id === dish.id);
+        const inCartCount = cartItem ? cartItem.quantity : 0;
+
+        return `
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-brand-grayBorder hover:border-brand-yellow/80 shadow-card hover:shadow-card-hover transition-smooth flex flex-col justify-between group">
+            
+            <!-- Dish Image Container -->
+            <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-4 bg-brand-grayBg">
+              <img 
+                src="${dish.image}" 
+                alt="${dish.title}" 
+                class="w-full h-full object-cover group-hover:scale-108 transition-smooth duration-500"
+                loading="lazy"
+              >
+              
+              <!-- Tag badge -->
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${dish.tagColor} shadow-xs">
+                ${dish.tag}
+              </span>
+
+              <!-- Delivery Time Badge -->
+              <span class="absolute bottom-3 right-3 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-lg text-[10px] font-bold text-brand-dark flex items-center gap-1 shadow-xs">
+                ⏱️ ${dish.time}
+              </span>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 flex flex-col justify-between">
+              
+              <div>
+                <!-- Rating and Category -->
+                <div class="flex items-center justify-between text-xs mb-1.5">
+                  <span class="text-brand-grayText font-bold text-[11px] uppercase tracking-wider">${dish.category}</span>
+                  <span class="text-brand-dark font-extrabold flex items-center gap-1">
+                    <span class="text-brand-yellowDark">★</span> ${dish.rating}
+                  </span>
+                </div>
+
+                <h3 class="text-base font-extrabold text-brand-dark leading-snug group-hover:text-brand-dark transition-smooth line-clamp-1 mb-1.5">
+                  ${dish.title}
+                </h3>
+
+                <p class="text-xs text-brand-grayText font-normal line-clamp-2 leading-relaxed mb-4">
+                  ${dish.desc}
+                </p>
+              </div>
+
+              <!-- Price & Add Button -->
+              <div class="pt-3 border-t border-brand-grayBorder/60 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] text-brand-grayText font-semibold uppercase block leading-none">Price</span>
+                  <span class="text-lg font-black text-brand-dark">$${dish.price.toFixed(2)}</span>
+                </div>
+
+                <button 
+                  onclick="addToCart(${dish.id})" 
+                  class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-black transition-smooth shadow-xs ${
+                    inCartCount > 0 
+                      ? 'bg-brand-dark text-white hover:bg-black' 
+                      : 'bg-brand-yellow text-brand-dark hover:bg-brand-yellowHover shadow-yellow'
+                  }"
+                >
+                  ${inCartCount > 0 ? `<span>In Basket (${inCartCount})</span>` : `<span>+ Add</span>`}
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Add To Cart
+    function addToCart(dishId) {
+      const dish = DISHES.find(d => d.id === dishId);
+      const existing = cart.find(item => item.dish.id === dishId);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ id: dishId, dish: dish, quantity: 1 });
+      }
+
+      showToast(`Added ${dish.title} to basket`);
+      updateCartUI();
+      renderDishes();
+    }
+
+    // Remove or Decrease Quantity
+    function changeQty(dishId, delta) {
+      const itemIndex = cart.findIndex(item => item.dish.id === dishId);
+      if (itemIndex > -1) {
+        cart[itemIndex].quantity += delta;
+        if (cart[itemIndex].quantity <= 0) {
+          cart.splice(itemIndex, 1);
+        }
+      }
+      updateCartUI();
+      renderDishes();
+    }
+
+    // Update Cart UI Drawer
+    function updateCartUI() {
+      const list = document.getElementById('cartItemsList');
+      const countBadge = document.getElementById('cartCountBadge');
+      const totalHeader = document.getElementById('cartTotalHeader');
+      const subtotalEl = document.getElementById('cartSubtotal');
+      const subtitle = document.getElementById('cartItemsSubtitle');
+      const finalTotalEl = document.getElementById('cartFinalTotal');
+      const discountRow = document.getElementById('cartDiscountRow');
+      const discountAmountEl = document.getElementById('cartDiscountAmount');
+
+      const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+      const subtotal = cart.reduce((acc, item) => acc + (item.dish.price * item.quantity), 0);
+
+      countBadge.innerText = totalItems;
+      subtitle.innerText = `${totalItems} items from Food Court`;
+
+      let finalTotal = subtotal;
+      if (discountApplied && subtotal > 0) {
+        const discount = subtotal * 0.30;
+        finalTotal = subtotal - discount;
+        discountRow.classList.remove('hidden');
+        discountAmountEl.innerText = `-$${discount.toFixed(2)}`;
+      } else {
+        discountRow.classList.add('hidden');
+      }
+
+      totalHeader.innerText = `$${finalTotal.toFixed(2)}`;
+      subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
+      finalTotalEl.innerText = `$${finalTotal.toFixed(2)}`;
+
+      if (cart.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-16">
+            <span class="text-4xl block mb-2">🛒</span>
+            <p class="text-sm font-bold text-brand-dark">Your basket is empty</p>
+            <p class="text-xs text-brand-grayText mt-1">Explore our delicious food court menu and add items.</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = cart.map(item => `
+        <div class="flex items-center gap-3 p-3.5 bg-brand-grayBg rounded-2xl border border-brand-grayBorder/60">
+          <img src="${item.dish.image}" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+          
+          <div class="flex-1 min-w-0">
+            <h4 class="text-xs font-bold text-brand-dark truncate leading-tight">${item.dish.title}</h4>
+            <p class="text-[11px] font-extrabold text-brand-dark mt-0.5">$${item.dish.price.toFixed(2)}</p>
+          </div>
+
+          <!-- Quantity Controls -->
+          <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-xl border border-brand-grayBorder">
+            <button onclick="changeQty(${item.dish.id}, -1)" class="w-5 h-5 text-brand-dark hover:text-brand-red font-bold text-xs">-</button>
+            <span class="text-xs font-black w-4 text-center">${item.quantity}</span>
+            <button onclick="changeQty(${item.dish.id}, 1)" class="w-5 h-5 text-brand-dark hover:text-brand-green font-bold text-xs">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Toggle Cart Drawer
+    function toggleCartDrawer() {
+      const drawer = document.getElementById('cartDrawer');
+      const backdrop = document.getElementById('cartDrawerBackdrop');
+
+      const isClosed = drawer.classList.contains('translate-x-full');
+      if (isClosed) {
+        backdrop.classList.remove('hidden');
+        setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+        drawer.classList.remove('translate-x-full');
+      } else {
+        backdrop.classList.add('opacity-0');
+        drawer.classList.add('translate-x-full');
+        setTimeout(() => backdrop.classList.add('hidden'), 300);
+      }
+    }
+
+    // Apply Promo Code
+    function applyPromoCode() {
+      const code = document.getElementById('cartPromoInput').value.trim().toUpperCase();
+      if (code === 'FOODCOURT30' || code === 'FOODCOURT') {
+        discountApplied = true;
+        showToast('Success! 30% discount applied to your order.');
+        updateCartUI();
+      } else {
+        showToast('Invalid promo code. Try FOODCOURT30');
+      }
+    }
+
+    function copyPromoCode() {
+      navigator.clipboard.writeText('FOODCOURT30');
+      showToast('Promo code FOODCOURT30 copied to clipboard!');
+      document.getElementById('cartPromoInput').value = 'FOODCOURT30';
+    }
+
+    // Checkout Handler
+    function handleCheckout() {
+      if (cart.length === 0) {
+        showToast('Your basket is empty. Add items first!');
+        return;
+      }
+      toggleCartDrawer();
+      showToast('Order confirmed! Courier is on the way.');
+      cart = [];
+      discountApplied = false;
+      updateCartUI();
+      renderDishes();
+    }
+
+    // Address Modal Controls
+    function openAddressModal() {
+      document.getElementById('addressModal').classList.remove('hidden');
+    }
+    function closeAddressModal() {
+      document.getElementById('addressModal').classList.add('hidden');
+    }
+    function selectAddress(addr) {
+      document.getElementById('currentAddress').innerHTML = `${addr} <svg class="w-3 h-3 text-brand-grayText inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`;
+      closeAddressModal();
+      showToast(`Delivery location set to: ${addr}`);
+    }
+    function saveCustomAddress() {
+      const val = document.getElementById('customAddressInput').value.trim();
+      if (val) {
+        selectAddress(val);
+      }
+    }
+
+    // Toast Notification helper
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      const text = document.getElementById('toastMessage');
+      text.innerText = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3500);
+    }
+
+    function scrollToMenu() {
+      document.getElementById('menuSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetFilters() {
+      searchQuery = '';
+      currentCategory = 'All';
+      document.getElementById('headerSearchInput').value = '';
+      document.getElementById('heroSearchInput').value = '';
+      filterCategory('All');
+    }
+
+    function handleNewsletter(e) {
+      e.preventDefault();
+      const email = document.getElementById('newsletterInput').value;
+      showToast(`Subscribed! VIP welcome coupon sent to ${email}`);
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>
